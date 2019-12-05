@@ -1,6 +1,6 @@
 <?php
 
-namespace Gogol\Invoices\Controllers;
+namespace CrudAdmin\LanguagesExport\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;

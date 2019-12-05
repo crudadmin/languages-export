@@ -1,6 +1,6 @@
 <?php
 
-namespace Gogol\Invoices\Providers;
+namespace CrudAdmin\LanguagesExport\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\Http\Kernel;
@@ -29,11 +29,9 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->mergeAdminConfigs();
 
-        Admin::addModelPath('Gogol\Invoices\Model', __dir__ . '/../Model/**');
-
         //Boot providers after this provider boot
         $this->bootProviders([
-            ViewServiceProvider::class
+
         ]);
     }
 
