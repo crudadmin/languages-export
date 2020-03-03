@@ -6,9 +6,9 @@ use CrudAdmin\LanguagesExport\Export\LanguagesExportHelper;
 
 class ExportController extends Controller
 {
-    public function index()
+    public function index($slug = null)
     {
-        $exportHelper = new LanguagesExportHelper;
+        $exportHelper = new LanguagesExportHelper($slug);
         $exportHelper->build();
 
         $file = $exportHelper->getExportPath();

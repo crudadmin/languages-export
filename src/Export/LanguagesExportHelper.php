@@ -9,6 +9,13 @@ use Admin;
 
 class LanguagesExportHelper
 {
+    protected $slug;
+
+    public function __construct($slug)
+    {
+        $this->slug = $slug;
+    }
+
     public function build()
     {
         $this->generatePoFile();
@@ -34,8 +41,7 @@ class LanguagesExportHelper
     {
         $translations = new Translations();
 
-        $defaultLanguage = Localization::getDefaultLanguage();
-        $locale = (new Gettext)->getLocale($defaultLanguage->slug);
+        $locale = (new Gettext)->getLocale($this->slug);
 
         $translations->setLanguage($locale);
         $translations->setHeader('Project-Id-Version', 'Translations export powered by CrudAdmin.com');
@@ -84,10 +90,13 @@ class LanguagesExportHelper
                         'id' => $row->getKey(),
                         'column' => $field,
                     ]));
+
+                    if ( $translate = @$row->getAttribute($field)[$this->slug] ) {
+                        $translation->setTranslation($translate);
+                    }
                 }
             }
         }
-
         return $translations;
     }
 }

@@ -27,7 +27,7 @@ class DownloadLanguageExportButton extends Button
      */
     public function fire(AdminModel $row)
     {
-        $url = action('\CrudAdmin\LanguagesExport\Controllers\ExportController@index');
+        $url = action('\CrudAdmin\LanguagesExport\Controllers\ExportController@index', $row->getSlug());
 
         return $this->message('Stiahnuť export jazyka môžete na tejto adrese:<br><a target="_blank" href="'.$url.'">'.$url.'</a>');
     }
