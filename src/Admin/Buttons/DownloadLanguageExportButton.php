@@ -13,7 +13,7 @@ class DownloadLanguageExportButton extends Button
     public function __construct(AdminModel $row)
     {
         //Name of button on hover
-        $this->name = 'Stiahnuť export';
+        $this->name = 'Download export';
 
         //Button classes
         $this->class = 'btn-primary';
