@@ -2,8 +2,8 @@
 
 namespace CrudAdmin\LanguagesExport\Export;
 
-use Gogol\Admin\Helpers\Gettext;
 use Gettext\Translations;
+use Gettext;
 use Localization;
 use Admin;
 
@@ -41,7 +41,7 @@ class LanguagesExportHelper
     {
         $translations = new Translations();
 
-        $locale = (new Gettext)->getLocale($this->slug);
+        $locale = Gettext::getLocale($this->slug);
 
         $translations->setLanguage($locale);
         $translations->setHeader('Project-Id-Version', 'Translations export powered by CrudAdmin.com');
@@ -67,31 +67,41 @@ class LanguagesExportHelper
     {
         $models = Admin::getAdminModels();
 
-        $translations = new Translations();
+        $translations = new Translations;
 
         foreach ($models as $model)
         {
             $fields = $this->getLocaleFields($model);
 
             //Skip unwanted tables
-            if ( in_array($model->getTable(), ['languages']) || count($fields) == 0 )
+            if ( in_array($model->getTable(), ['languages']) || count($fields) == 0 ) {
                 continue;
+            }
 
             $rows = $model->withoutGlobalScopes()
                           ->select(array_merge([$model->getKeyName()], $fields))
                           ->whereNull('deleted_at')
                           ->get();
 
+            $skipFields = $model->skipExportFields ?? [];
+
             foreach ($rows as $row) {
-                foreach ($fields as $field) {
-                    $translation = $translations->insert(null, $row->{$field});
+                foreach ($fields as $fieldKey) {
+                    if ( in_array($fieldKey, $skipFields) || $model->isFieldType($fieldKey, 'file') ){
+                        continue;
+                    }
+
+                    $castedValue = $fieldKey == 'slug' ? $row->getSlug() : $row->{$fieldKey};
+
+                    $translation = $translations->insert(null, $castedValue);
+
                     $translation->addComment(json_encode([
                         'table' => $model->getTable(),
                         'id' => $row->getKey(),
-                        'column' => $field,
+                        'column' => $fieldKey,
                     ]));
 
-                    if ( $translate = @$row->getAttribute($field)[$this->slug] ) {
+                    if ( $translate = ($row->getAttribute($fieldKey)[$this->slug] ?? null) ) {
                         $translation->setTranslation($translate);
                     }
                 }

@@ -33,6 +33,9 @@ class AppServiceProvider extends ServiceProvider
         $this->bootProviders([
 
         ]);
+
+        //Load routes
+        $this->loadRoutesFrom(__DIR__.'/../Routes/routes.php');
     }
 
     /**
@@ -51,9 +54,6 @@ class AppServiceProvider extends ServiceProvider
         $this->bootProviders();
 
         $this->bootRouteMiddleware();
-
-        //Load routes
-        $this->loadRoutesFrom(__DIR__.'/../Routes/routes.php');
     }
 
     public function bootFacades()

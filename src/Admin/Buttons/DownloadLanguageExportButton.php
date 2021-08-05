@@ -2,8 +2,8 @@
 
 namespace CrudAdmin\LanguagesExport\Admin\Buttons;
 
-use Gogol\Admin\Helpers\Button;
-use Gogol\Admin\Models\Model as AdminModel;
+use Admin\Helpers\Button;
+use Admin\Eloquent\AdminModel;
 
 class DownloadLanguageExportButton extends Button
 {
@@ -29,6 +29,6 @@ class DownloadLanguageExportButton extends Button
     {
         $url = action('\CrudAdmin\LanguagesExport\Controllers\ExportController@index', $row->getSlug());
 
-        return $this->message('Stiahnuť export jazyka môžete na tejto adrese:<br><a target="_blank" href="'.$url.'">'.$url.'</a>');
+        return $this->redirect($url);
     }
 }
